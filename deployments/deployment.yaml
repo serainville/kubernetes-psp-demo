@@ -1,0 +1,120 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: alpine-nonroot-uid
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: alpine-nonroot-username
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: alpine-root
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: alpine-privileged
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-nonroot-uid
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-nonroot-uid
+  template:
+    metadata:
+      labels:
+        app: alpine-nonroot-uid
+    spec:
+      serviceAccountName: alpine-nonroot-uid
+      containers:
+      - name: alpine
+        image: serverlab/alpine-nonroot-uid
+        imagePullPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-nonroot-username
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-nonroot-username
+  template:
+    metadata:
+      labels:
+        app: alpine-nonroot-username
+    spec:
+      serviceAccountName: alpine-nonroot-username
+      containers:
+      - name: alpine
+        image: serverlab/alpine-nonroot-username
+        imagePullPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-root
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-nonroot-root
+  template:
+    metadata:
+      labels:
+        app: alpine-nonroot-root
+    spec:
+      serviceAccountName: alpine-root
+      containers:
+      - name: alpine
+        image: serverlab/alpine-root
+        imagePullPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-root-priv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-root-priv
+  template:
+    metadata:
+      labels:
+        app: alpine-root-priv
+    spec:
+      serviceAccountName: alpine-privileged
+      containers:
+      - name: alpine
+        image: serverlab/alpine-root
+        imagePullPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-nonroot-username-priv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-nonroot-username-priv
+  template:
+    metadata:
+      labels:
+        app: alpine-nonroot-username-priv
+    spec:
+      serviceAccountName: alpine-privileged
+      containers:
+      - name: alpine
+        image: serverlab/alpine-nonroot-username
+        imagePullPolicy: Always
